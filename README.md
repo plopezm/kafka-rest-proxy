@@ -13,12 +13,15 @@ It is required to provide the following properties:
 * app.address=http://localhost:8080 # It is used to navigate over rest API, the value is the public address for this service
 * zookeeper.servers=localhost:2181,localhost:2182,localhost:2183
 
-# Currently implemented endpoints
+# Implemented endpoints
 
-* GET /navigation/nodes 	-> returns the existing nodes in zookeeper
-* GET /kafka/addresses 		-> returns kafka addresses
-* GET /kafka/cluster-info 	-> returns kafka cluster info
-* GET /kafka/topics			-> returns registered topics
+```
+* GET /navigation/nodes 			-> returns the existing nodes in zookeeper
+* GET /kafka/addresses 				-> returns kafka addresses
+* GET /kafka/cluster-info 			-> returns kafka cluster info
+* GET /kafka/topics					-> returns registered topics
+* GET /kafka/topics/topicId			-> returns all messages from selected topic from all partitions
+```
 
 # Next steps
 
