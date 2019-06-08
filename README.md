@@ -20,6 +20,12 @@ It is required to provide the following properties:
 * GET /kafka/cluster-info 	-> returns kafka cluster info
 * GET /kafka/topics			-> returns registered topics
 
+# Next steps
+
+* Topic management
+* Consume and produce from topics for debugging purpose
+* Security management
+
 # Examples
 
 * GET http://localhost:8080/navigation/nodes
