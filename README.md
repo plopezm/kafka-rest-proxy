@@ -24,6 +24,7 @@ It is required to provide the following properties:
 
 * Topic management
 * Consume and produce from topics for debugging purpose
+* Dockerfile and Dockerhub image
 * Security management
 
 # Examples
