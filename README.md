@@ -15,12 +15,14 @@ It is required to provide the following properties:
 
 # Implemented endpoints
 
+Swagger documentation: http://localhost:8080/swagger-ui.html
+
 ```
-* GET /navigation/nodes 			-> returns the existing nodes in zookeeper
-* GET /kafka/addresses 				-> returns kafka addresses
-* GET /kafka/cluster-info 			-> returns kafka cluster info
-* GET /kafka/topics					-> returns registered topics
-* GET /kafka/topics/topicId			-> returns all messages from selected topic from all partitions
+* GET /navigation/nodes 	-> returns the existing nodes in zookeeper
+* GET /kafka/addresses 		-> returns kafka addresses
+* GET /kafka/cluster-info 	-> returns kafka cluster info
+* GET /kafka/topics			-> returns registered topics
+* GET /kafka/topics/topicId	-> returns all messages from selected topic from all partitions
 ```
 
 # Next steps
