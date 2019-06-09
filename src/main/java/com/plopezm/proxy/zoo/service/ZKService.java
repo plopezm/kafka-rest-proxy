@@ -8,6 +8,8 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,14 @@ import com.plopezm.proxy.zoo.control.ZKConnection;
 
 @Service
 public class ZKService {
+	private static Logger LOG = LoggerFactory.getLogger(ZKService.class);
+	
 	private static ZooKeeper zkeeper;
     private static ZKConnection zkConnection;
  
-    public ZKService(@Value("${zookeeper.servers}") final String servers) throws IOException, InterruptedException {
+    public ZKService(@Value("${zookeeper.servers}") final String servers, @Value("${app.startup.delay:0}") Integer delay) throws IOException, InterruptedException {
+		LOG.info("Loading cluster information, waiting for kafka initialization... {} millis", delay);
+		Thread.sleep(delay);
         initialize(servers);
     }
  

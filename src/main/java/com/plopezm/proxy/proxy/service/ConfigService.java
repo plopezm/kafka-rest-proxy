@@ -22,7 +22,7 @@ public class ConfigService {
 	private ZKService zkService;
 	private String bootstrapAddress;
 	
-	public ConfigService(@Autowired final ZKService zkService) 
+	public ConfigService(@Autowired final ZKService zkService)
 			throws JsonParseException, JsonMappingException, KeeperException, InterruptedException, IOException {
 		this.zkService = zkService;
 		this.bootstrapAddress = this.buildBootstrapAddress();
