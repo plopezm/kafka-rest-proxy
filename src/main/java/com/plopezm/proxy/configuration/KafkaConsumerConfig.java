@@ -17,15 +17,15 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.plopezm.proxy.proxy.service.ProxyService;
+import com.plopezm.proxy.proxy.service.ConfigService;
 
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
 
-	private ProxyService proxyService;
+	private ConfigService proxyService;
 	
-	public KafkaConsumerConfig(@Autowired final ProxyService proxyService) {
+	public KafkaConsumerConfig(@Autowired final ConfigService proxyService) {
 		this.proxyService = proxyService;
 	}
 	

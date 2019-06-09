@@ -16,15 +16,15 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.plopezm.proxy.proxy.service.ProxyService;
+import com.plopezm.proxy.proxy.service.ConfigService;
 
 
 @Configuration
 public class KafkaProducerConfig {
 	
-	private ProxyService proxyService;
+	private ConfigService proxyService;
 	
-	public KafkaProducerConfig(@Autowired final ProxyService proxyService) {
+	public KafkaProducerConfig(@Autowired final ConfigService proxyService) {
 		this.proxyService = proxyService;
 	}
 	
@@ -40,6 +40,7 @@ public class KafkaProducerConfig {
         configProps.put(
           ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
           StringSerializer.class);
+        
         return new DefaultKafkaProducerFactory<>(configProps);
     }
  

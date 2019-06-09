@@ -1,57 +1,42 @@
 package com.plopezm.proxy.api.v1;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
-import org.apache.zookeeper.KeeperException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.plopezm.proxy.proxy.entity.ZKBrokerConfig;
-import com.plopezm.proxy.proxy.service.ProxyService;
 
 @RestController
 @RequestMapping("/kafka")
 public class BrokerController {
 	
-	private ProxyService proxyService;
 	private ConsumerFactory<String, String> consumerFactory;
+	private KafkaTemplate<String, String> kafkaTemplate;
 	
-	@Autowired
-    private ConcurrentKafkaListenerContainerFactory<String, String> kafkaTemplate;
-	
-	public BrokerController(@Autowired final ProxyService proxyService,
-			@Autowired final ConsumerFactory<String, String> consumerFactory) {
-		this.proxyService = proxyService;
+	public BrokerController(@Autowired final ConsumerFactory<String, String> consumerFactory,
+			@Autowired final KafkaTemplate<String, String> kafkaTemplate) {
 		this.consumerFactory = consumerFactory;
-	}
-	
-	@GetMapping(path = "/addresses")
-	public String getConnectionString() 
-			throws JsonParseException, JsonMappingException, KeeperException, InterruptedException, IOException {
-		return proxyService.getBootstrapAddress();
-	}
-	
-	@GetMapping(path = "/cluster-info", produces = "application/json")
-	public List<ZKBrokerConfig> getClusterInfo() 
-			throws JsonParseException, JsonMappingException, KeeperException, InterruptedException, IOException {
-		return proxyService.getBrokerConfigs();
+		this.kafkaTemplate = kafkaTemplate;
 	}
 	
 	@GetMapping(path = "/topics", produces = "application/json")
@@ -82,6 +67,18 @@ public class BrokerController {
 	        }
 	        return result;
 		}
+	}
+	
+	@PostMapping(path = "/topics/{topicId}/{key}")
+	public SendResult<String, String> writeTopic(@PathVariable("topicId") final String topicId,
+			@PathVariable("topicId") final String key, @RequestBody String data) 
+			throws InterruptedException, ExecutionException {
+		Message<String> message = MessageBuilder
+                .withPayload(data)
+                .setHeader(KafkaHeaders.TOPIC, topicId)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, key)
+                .build();
+		return this.kafkaTemplate.send(message).get();
 	}
 
 }

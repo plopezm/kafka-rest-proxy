@@ -15,14 +15,14 @@ import com.plopezm.proxy.proxy.entity.ZKBrokerConfig;
 import com.plopezm.proxy.zoo.service.ZKService;
 
 @Service
-public class ProxyService {
+public class ConfigService {
 	
 	private static final String BROKER_IDS_PATH = "/brokers/ids";
 
 	private ZKService zkService;
 	private String bootstrapAddress;
 	
-	public ProxyService(@Autowired final ZKService zkService) 
+	public ConfigService(@Autowired final ZKService zkService) 
 			throws JsonParseException, JsonMappingException, KeeperException, InterruptedException, IOException {
 		this.zkService = zkService;
 		this.bootstrapAddress = this.buildBootstrapAddress();
@@ -56,5 +56,6 @@ public class ProxyService {
 	public String getBootstrapAddress()  {
 		return this.bootstrapAddress;
 	}
+	
 	
 }
