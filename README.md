@@ -1,4 +1,4 @@
-# Kafka Rest Proxy (WIP)
+# Kafka Rest Proxy
 
 This project is focused on managing Kafka environment via REST.
 
