@@ -10,7 +10,7 @@ Once the service is up, it finds the brokers registered in zookeeper providing t
 
 It is required to provide the following properties:
 
-* app.address=http://localhost:8080 # It is used to navigate over rest API, the value is the public address for this service
+* app.address=http://localhost:8080 # It is used to navigate over rest API, the value is the public address of this service
 * zookeeper.servers=localhost:2181,localhost:2182,localhost:2183
 
 # Implemented endpoints
