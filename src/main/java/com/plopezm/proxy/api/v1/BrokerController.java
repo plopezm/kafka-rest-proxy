@@ -73,7 +73,7 @@ public class BrokerController {
 	
 	@PostMapping(path = "/topics/{topicId}/{key}")
 	public SendResult<String, Object> writeTopic(@PathVariable("topicId") final String topicId,
-			@PathVariable("topicId") final String key, @RequestBody Object data) 
+			@PathVariable("key") final String key, @RequestBody Object data) 
 			throws InterruptedException, ExecutionException {
 		Message<Object> message = MessageBuilder
                 .withPayload(data)
