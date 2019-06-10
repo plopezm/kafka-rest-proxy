@@ -16,6 +16,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import com.plopezm.proxy.proxy.service.ConfigService;
 
 
@@ -29,7 +30,7 @@ public class KafkaProducerConfig {
 	}
 	
 	@Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
           ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, 
@@ -39,13 +40,13 @@ public class KafkaProducerConfig {
           StringSerializer.class);
         configProps.put(
           ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
-          StringSerializer.class);
+          JsonSerializer.class);
         
         return new DefaultKafkaProducerFactory<>(configProps);
     }
  
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() 
+    public KafkaTemplate<String, Object> kafkaTemplate() 
     		throws JsonParseException, JsonMappingException, KeeperException, InterruptedException, IOException {
         return new KafkaTemplate<>(producerFactory());
     }

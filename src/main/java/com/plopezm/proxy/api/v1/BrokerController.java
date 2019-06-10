@@ -26,29 +26,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.spring.web.json.Json;
+
 @RestController
 @RequestMapping("/kafka")
 public class BrokerController {
 	
-	private ConsumerFactory<String, String> consumerFactory;
-	private KafkaTemplate<String, String> kafkaTemplate;
+	private ConsumerFactory<String, Object> consumerFactory;
+	private KafkaTemplate<String, Object> kafkaTemplate;
 	
-	public BrokerController(@Autowired final ConsumerFactory<String, String> consumerFactory,
-			@Autowired final KafkaTemplate<String, String> kafkaTemplate) {
+	public BrokerController(@Autowired final ConsumerFactory<String, Object> consumerFactory,
+			@Autowired final KafkaTemplate<String, Object> kafkaTemplate) {
 		this.consumerFactory = consumerFactory;
 		this.kafkaTemplate = kafkaTemplate;
 	}
 	
 	@GetMapping(path = "/topics", produces = "application/json")
 	public Map<String, List<PartitionInfo>> getTopics() {
-		try(final Consumer consumer = this.consumerFactory.createConsumer()) {
+		try(final Consumer<String, Object> consumer = this.consumerFactory.createConsumer()) {
 			return consumer.listTopics();
 		}
 	}
 	
 	@GetMapping(path = "/topics/{topicId}")
 	public List<ConsumerRecord<String, Object>> readTopic(@PathVariable("topicId") final String topicId) {
-		try(final Consumer consumer = this.consumerFactory.createConsumer()) {
+		try(final Consumer<String, Object> consumer = this.consumerFactory.createConsumer()) {			
 			Map<String, List<PartitionInfo>> topicListMap = consumer.listTopics();
 	        List<ConsumerRecord<String, Object>> result = new LinkedList<>();
 	        for (PartitionInfo partitionInfo : topicListMap.get(topicId)) {
@@ -70,10 +72,10 @@ public class BrokerController {
 	}
 	
 	@PostMapping(path = "/topics/{topicId}/{key}")
-	public SendResult<String, String> writeTopic(@PathVariable("topicId") final String topicId,
-			@PathVariable("topicId") final String key, @RequestBody String data) 
+	public SendResult<String, Object> writeTopic(@PathVariable("topicId") final String topicId,
+			@PathVariable("topicId") final String key, @RequestBody Object data) 
 			throws InterruptedException, ExecutionException {
-		Message<String> message = MessageBuilder
+		Message<Object> message = MessageBuilder
                 .withPayload(data)
                 .setHeader(KafkaHeaders.TOPIC, topicId)
                 .setHeader(KafkaHeaders.MESSAGE_KEY, key)

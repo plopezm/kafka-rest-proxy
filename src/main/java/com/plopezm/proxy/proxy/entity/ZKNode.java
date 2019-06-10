@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ZKNode {
@@ -18,9 +19,9 @@ public class ZKNode {
 		this.nodePath = nodePath;
 		this.childs = childs;
 		if (data != null) {
-			try {
-				HashMap<String,Object> result =
-				        new ObjectMapper().readValue(data, HashMap.class);
+			try {				
+				TypeReference<HashMap<String,Object>> typeRef = new TypeReference<HashMap<String,Object>>() {};
+				HashMap<String,Object> result = new ObjectMapper().readValue(data, typeRef);
 				this.data = result;
 			} catch (IOException e) {
 				this.data = data;

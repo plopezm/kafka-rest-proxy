@@ -1,6 +1,7 @@
 package com.plopezm.proxy.proxy.service;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,18 @@ public class ConfigService {
 		this.bootstrapAddress = this.buildBootstrapAddress();
 	}
 
+    private static boolean hostAvailabilityCheck(String url) { 
+		String[] urlAndPort = url.split(":");
+		String hostname = urlAndPort[0];
+		int port = Integer.parseInt(urlAndPort[1]);
+        try (Socket s = new Socket(hostname, port)) {
+            return true;
+        } catch (IOException ex) {
+            /* ignore */
+        }
+        return false;
+    }
+
 	public List<ZKBrokerConfig> getBrokerConfigs() 
 			throws KeeperException, InterruptedException, JsonParseException, JsonMappingException, IOException {
 		List<String> brokerIds = this.zkService.getZNodeChildrens(BROKER_IDS_PATH, false);
@@ -45,7 +58,10 @@ public class ConfigService {
 		String bootstrapAddress = "";
 		for (ZKBrokerConfig config : configs) {
 			for (String addr : config.getEndpoints()) {
-				bootstrapAddress += ","+addr.split("://")[1];
+				String kafkaUrl = addr.split("://")[1];
+				if (hostAvailabilityCheck(kafkaUrl)) {
+					bootstrapAddress += ","+addr.split("://")[1];
+				}
 			}
 		}
 		if (bootstrapAddress.length() > 0)
