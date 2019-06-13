@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.plopezm.proxy.zoo.service.ZooService;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.zookeeper.KeeperException;
@@ -15,18 +19,14 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.plopezm.proxy.proxy.service.ConfigService;
-
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
 
-	private ConfigService proxyService;
+	private ZooService zooService;
 	
-	public KafkaConsumerConfig(@Autowired final ConfigService proxyService) {
-		this.proxyService = proxyService;
+	public KafkaConsumerConfig(@Autowired final ZooService proxyService) {
+		this.zooService = proxyService;
 	}
 	
 	@Bean
@@ -34,7 +34,7 @@ public class KafkaConsumerConfig {
       Map<String, Object> props = new HashMap<>();
       props.put(
         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, 
-        proxyService.getBootstrapAddress());
+        zooService.getBootstrapAddress());
       props.put(
         ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, 
         StringDeserializer.class);

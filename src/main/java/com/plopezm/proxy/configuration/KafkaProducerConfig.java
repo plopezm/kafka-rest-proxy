@@ -16,17 +16,18 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.plopezm.proxy.zoo.service.ZooService;
+
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import com.plopezm.proxy.proxy.service.ConfigService;
 
 
 @Configuration
 public class KafkaProducerConfig {
 	
-	private ConfigService proxyService;
+	private ZooService zooService;
 	
-	public KafkaProducerConfig(@Autowired final ConfigService proxyService) {
-		this.proxyService = proxyService;
+	public KafkaProducerConfig(@Autowired final ZooService proxyService) {
+		this.zooService = proxyService;
 	}
 	
 	@Bean
@@ -34,7 +35,7 @@ public class KafkaProducerConfig {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
           ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, 
-          proxyService.getBootstrapAddress());
+          zooService.getBootstrapAddress());
         configProps.put(
           ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, 
           StringSerializer.class);

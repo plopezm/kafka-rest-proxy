@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plopezm.proxy.proxy.entity.ZKNode;
-import com.plopezm.proxy.zoo.service.ZKService;
+import com.plopezm.proxy.zoo.service.ZooService;
 
 @RestController
 @RequestMapping("/navigation")
 public class NavigationController {
 	
-	private ZKService zkService;
+	private ZooService zkService;
 	private String serverAddress;
 	
-	public NavigationController(@Autowired final ZKService zkService,
+	public NavigationController(@Autowired final ZooService zkService,
 			@Value("${app.address}") final String serverAddress) {
 		this.zkService = zkService;
 		this.serverAddress = serverAddress;
