@@ -20,15 +20,18 @@ public class AdminService {
 	private KafkaAdmin kafkaAdmin;
 	private ZooService zooService;
 	private String topicsLocationPath;
+	private String topicsConfigLocationPath;
 	private String deleteTopicLocationPath;
 
 	public AdminService(@Autowired KafkaAdmin kafkaAdmin, @Autowired ZooService zooService,
 			@Value("${zookeeper.topics.location}") String topicsLocationPath,
+			@Value("${zookeeper.topics.config.location}") String topicsConfigLocationPath,
 			@Value("${zookeeper.topics.delete.location}") String deleteTopicLocationPath) {
 
 		this.kafkaAdmin = kafkaAdmin;
 		this.zooService = zooService;
 		this.topicsLocationPath = topicsLocationPath;
+		this.topicsConfigLocationPath = topicsConfigLocationPath;
 		this.deleteTopicLocationPath = deleteTopicLocationPath;
 	}
 
@@ -43,6 +46,7 @@ public class AdminService {
 
 	public void deleteTopic(String topic) throws InterruptedException, KeeperException {
 		this.zooService.recursiveDelete(this.topicsLocationPath+"/"+topic);
+		this.zooService.recursiveDelete(this.topicsConfigLocationPath+"/"+topic);
 		this.zooService.delete(this.deleteTopicLocationPath+"/"+topic);
 	}
 }
