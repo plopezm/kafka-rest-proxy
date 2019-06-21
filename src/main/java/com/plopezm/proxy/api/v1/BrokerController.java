@@ -13,6 +13,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -47,22 +49,33 @@ public class BrokerController {
 	}
 	
 	@GetMapping(path = "/topics/{topicId}")
-	public List<ConsumerRecord<String, Object>> readTopic(@PathVariable("topicId") final String topicId) {
+	public List<ConsumerRecord<String, Object>> readTopic(
+		@PathVariable("topicId") final String topicId,
+		@RequestParam(value = "offset", required = false) final Integer offset,
+		@RequestParam(value = "max", required = false) final Integer max) {
+
 		try(final Consumer<String, Object> consumer = this.consumerFactory.createConsumer()) {			
 			Map<String, List<PartitionInfo>> topicListMap = consumer.listTopics();
 	        List<ConsumerRecord<String, Object>> result = new LinkedList<>();
 	        for (PartitionInfo partitionInfo : topicListMap.get(topicId)) {
 	        	TopicPartition topicPartition = new TopicPartition(partitionInfo.topic(), partitionInfo.partition());
-	        	consumer.assign(Arrays.asList(topicPartition));
-	        	consumer.seek(topicPartition, 0);
+				consumer.assign(Arrays.asList(topicPartition));
+				if (offset != null) {
+					consumer.seek(topicPartition, offset);
+				} else {
+					consumer.seek(topicPartition, 0);
+				}
 		        while (true) {
-		            ConsumerRecords<String, Object> records = consumer.poll(Duration.ofSeconds(1));
+					ConsumerRecords<String, Object> records = consumer.poll(Duration.ofSeconds(1));
 		            if (records.isEmpty()) {
 		                break;
 		            }
 		            for (ConsumerRecord<String, Object> record : records) {
 		                result.add(record);
-		            }
+					}
+					if (max != null && result.size() >= max) {
+						break;
+					}
 		        }
 	        }
 	        return result;
