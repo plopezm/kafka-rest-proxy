@@ -20,7 +20,9 @@ If you are executing this application with docker, then the following environmen
 
 # Implemented endpoints
 
-Swagger documentation: http://localhost:9000/swagger-ui.html
+* WebApp: http://localhost:9000
+* Swagger documentation: http://localhost:9000/swagger-ui.html
+
 
 ```
 * GET  /navigation/nodes 	 			-> returns the existing nodes in zookeeper
