@@ -63,7 +63,7 @@ module.exports = "<table mat-table [dataSource]=\"data\" class=\"mat-elevation-z
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-tabledata [columns]=\"columns\" [data]=\"data\" ></app-tabledata>"
+module.exports = "<div class=\"formWrapper\">\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Offset\" value=\"{{this.offset}}\" (change)=\"this.updateOffset($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Max records\" value=\"{{this.maxRecords}}\" (change)=\"this.updateMax($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <button mat-icon-button color=\"primary\" (click)=\"refresh()\"><mat-icon>refresh</mat-icon></button>\r\n</div>\r\n<app-tabledata [columns]=\"columns\" [data]=\"data\" ></app-tabledata>\r\n"
 
 /***/ }),
 
@@ -225,7 +225,9 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableModule"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_9__["HttpClientModule"],
             _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatProgressSpinnerModule"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot(_routes_routes__WEBPACK_IMPORTED_MODULE_6__["appRoutes"]),
+            _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatFormFieldModule"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatInputModule"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot(_routes_routes__WEBPACK_IMPORTED_MODULE_6__["appRoutes"], { useHash: true }),
         ],
         providers: [
             _angular_common__WEBPACK_IMPORTED_MODULE_14__["JsonPipe"],
@@ -372,7 +374,7 @@ TabledataComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbnRhaW5lcnMvdG9waWMtaW5mby90b3BpYy1pbmZvLmNvbXBvbmVudC5jc3MifQ== */"
+module.exports = ".formWrapper {\r\n    margin: 15px;\r\n    text-align: right;\r\n}\r\n\r\n.form-field-wrapper {\r\n    margin-left: 15px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29udGFpbmVycy90b3BpYy1pbmZvL3RvcGljLWluZm8uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFlBQVk7SUFDWixpQkFBaUI7QUFDckI7O0FBRUE7SUFDSSxpQkFBaUI7QUFDckIiLCJmaWxlIjoic3JjL2FwcC9jb250YWluZXJzL3RvcGljLWluZm8vdG9waWMtaW5mby5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmZvcm1XcmFwcGVyIHtcclxuICAgIG1hcmdpbjogMTVweDtcclxuICAgIHRleHQtYWxpZ246IHJpZ2h0O1xyXG59XHJcblxyXG4uZm9ybS1maWVsZC13cmFwcGVyIHtcclxuICAgIG1hcmdpbi1sZWZ0OiAxNXB4O1xyXG59Il19 */"
 
 /***/ }),
 
@@ -400,23 +402,44 @@ let TopicInfoComponent = class TopicInfoComponent {
     constructor(router, topicService) {
         this.router = router;
         this.topicService = topicService;
+        this.offset = 0;
+        this.maxRecords = 100;
         this.columns = [];
         this.router.paramMap.subscribe(params => {
-            this.data = this.topicService.getTopicMessages(params.get("id")).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(response => {
-                return response.map(msg => {
-                    delete msg["headers"];
-                    delete msg["checksum"];
-                    return msg;
-                });
-            }));
-            this.data.subscribe(topicInfo => {
-                if (topicInfo != undefined && topicInfo.length > 0) {
-                    this.columns = Object.keys(topicInfo[0]);
-                }
-            });
+            this.topicId = params.get("id");
+            this.refresh();
         });
     }
     ngOnInit() {
+    }
+    refresh() {
+        this.data = this.topicService.getTopicMessages(this.topicId, this.offset, this.maxRecords).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(response => {
+            return response.map(msg => {
+                delete msg["headers"];
+                delete msg["checksum"];
+                return msg;
+            }).sort(function (a, b) {
+                if (a.offset > b.offset) {
+                    return -1;
+                }
+                if (a.offset < b.offset) {
+                    return 1;
+                }
+                // a must be equal to b
+                return 0;
+            });
+        }));
+        this.data.subscribe(topicInfo => {
+            if (topicInfo != undefined && topicInfo.length > 0) {
+                this.columns = Object.keys(topicInfo[0]);
+            }
+        });
+    }
+    updateOffset(offset) {
+        this.offset = offset;
+    }
+    updateMax(max) {
+        this.maxRecords = max;
     }
 };
 TopicInfoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -697,8 +720,8 @@ let TopicService = class TopicService {
             }, []);
         }));
     }
-    getTopicMessages(topic, offset = 0) {
-        return this.httpClient.get(`/kafka/topics/${topic}`);
+    getTopicMessages(topic, offset = 0, limit) {
+        return this.httpClient.get(`/kafka/topics/${topic}?offset=${offset}&max=${limit}`);
     }
 };
 TopicService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
