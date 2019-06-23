@@ -1,0 +1,14 @@
+<div style="margin:10px">
+    <h2> Topic messages </h2>
+</div>
+   
+<div class="formWrapper" *ngIf="rows != undefined && rows.length > 0">
+    <mat-form-field class="form-field-wrapper">
+        <input matInput type="number" placeholder="Offset" value="{{this.offset}}" (change)="this.updateOffset($event.target.value)" min="0">
+    </mat-form-field>
+    <mat-form-field class="form-field-wrapper">
+        <input matInput type="number" placeholder="Max records" value="{{this.maxRecords}}" (change)="this.updateMax($event.target.value)" min="0">
+    </mat-form-field>
+    <button mat-icon-button color="primary" (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+</div>
+<app-tabledata [columns]="columns" [data]="rows" ></app-tabledata>

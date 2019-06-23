@@ -1,0 +1,23 @@
+<div style="margin:10px">
+    <h2> Topics </h2>
+    
+</div>
+
+<mat-card style="margin: 10px">
+    <h3>Create topic</h3>
+    <mat-form-field class="form-field-wrapper">
+        <input matInput type="text" placeholder="Queue name" value="{{this.newTopic.topicName}}" (change)="this.setNewTopicValue('topicName', $event.target.value)">
+    </mat-form-field>
+    <mat-form-field class="form-field-wrapper">
+        <input matInput type="number" placeholder="Partitions" value="{{this.newTopic.partitions}}" (change)="this.setNewTopicValue('partitions', $event.target.value)" min="1">
+    </mat-form-field>
+    <mat-form-field class="form-field-wrapper">
+        <input matInput type="number" placeholder="Replicas" value="{{this.newTopic.replicas}}" (change)="this.setNewTopicValue('replicas', $event.target.value)" min="1">
+    </mat-form-field>
+    <button mat-icon-button color="primary" (click)="createTopic()"><mat-icon>add</mat-icon></button>
+</mat-card>
+<mat-card style="margin: 10px">    
+    <h3>Topics found</h3>
+    <mat-slide-toggle color="primary">System queues</mat-slide-toggle>
+    <app-tabledata [columns]="columns" [data]="rows" (onRowClick)="onTopicClick($event)" ></app-tabledata>
+</mat-card>
