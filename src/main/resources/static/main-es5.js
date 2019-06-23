@@ -52,7 +52,7 @@ module.exports = "<div *ngIf=\"isLoading | async\" class=\"overlay\">\n  <mat-pr
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"displayedColumns && displayedColumns.length > 0\">\n  <mat-form-field class=\"wrapper\">\n    <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Filter\">\n  </mat-form-field>\n  <table id=\"table\" mat-table [dataSource]=\"datasource\" class=\"mat-elevation-z8\">\n\n    <ng-container *ngFor=\"let column of displayedColumns\" [matColumnDef]=\"column\">\n      <th mat-header-cell *matHeaderCellDef> {{column}} </th>\n      <td mat-cell *matCellDef=\"let element\"> \n        {{this.getInfo(element[column])}} \n      </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\" (click)=\"onRowClick.emit(row)\"></tr>\n  </table>\n</div>\n<div *ngIf=\"!displayedColumns || displayedColumns.length === 0\">\n  <h2 style=\"text-align: center\">No data found</h2>\n</div>"
+module.exports = "<div *ngIf=\"displayedColumns && displayedColumns.length > 0\">\n<mat-form-field class=\"wrapper\">\n  <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Filter\">\n</mat-form-field>\n<table id=\"table\" mat-table [dataSource]=\"datasource\" class=\"mat-elevation-z1\">\n\n  <ng-container *ngFor=\"let column of displayedColumns\" [matColumnDef]=\"column\">\n    <th mat-header-cell *matHeaderCellDef> {{column}} </th>\n    <td mat-cell *matCellDef=\"let element\"> \n      {{this.getInfo(element[column])}} \n    </td>\n  </ng-container>\n\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\" (click)=\"onRowClick.emit(row)\"></tr>\n</table>\n</div>\n<div *ngIf=\"!displayedColumns || displayedColumns.length === 0\">\n  <h2 style=\"text-align: center\">No data found</h2>\n</div>"
 
 /***/ }),
 
@@ -63,7 +63,7 @@ module.exports = "<div *ngIf=\"displayedColumns && displayedColumns.length > 0\"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"formWrapper\">\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Offset\" value=\"{{this.offset}}\" (change)=\"this.updateOffset($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Max records\" value=\"{{this.maxRecords}}\" (change)=\"this.updateMax($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <button mat-icon-button color=\"primary\" (click)=\"refresh()\"><mat-icon>refresh</mat-icon></button>\r\n</div>\r\n<app-tabledata [columns]=\"columns\" [data]=\"rows\" ></app-tabledata>\r\n"
+module.exports = "<div style=\"margin:10px\">\r\n    <h2> Topic messages </h2>\r\n</div>\r\n   \r\n<div class=\"formWrapper\" *ngIf=\"rows != undefined && rows.length > 0\">\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Offset\" value=\"{{this.offset}}\" (change)=\"this.updateOffset($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Max records\" value=\"{{this.maxRecords}}\" (change)=\"this.updateMax($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <button mat-icon-button color=\"primary\" (click)=\"refresh()\"><mat-icon>refresh</mat-icon></button>\r\n</div>\r\n<app-tabledata [columns]=\"columns\" [data]=\"rows\" ></app-tabledata>"
 
 /***/ }),
 
@@ -74,7 +74,7 @@ module.exports = "<div class=\"formWrapper\">\r\n    <mat-form-field class=\"for
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2> Topics </h2>\n<app-tabledata [columns]=\"columns\" [data]=\"rows\" (onRowClick)=\"onTopicClick($event)\" ></app-tabledata>\n"
+module.exports = "<div style=\"margin:10px\">\n    <h2> Topics </h2>\n    \n</div>\n\n<mat-card style=\"margin: 10px\">\n    <h3>Create topic</h3>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"text\" placeholder=\"Queue name\" value=\"{{this.newTopic.topicName}}\" (change)=\"this.setNewTopicValue('topicName', $event.target.value)\">\n    </mat-form-field>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"number\" placeholder=\"Partitions\" value=\"{{this.newTopic.partitions}}\" (change)=\"this.setNewTopicValue('partitions', $event.target.value)\" min=\"1\">\n    </mat-form-field>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"number\" placeholder=\"Replicas\" value=\"{{this.newTopic.replicas}}\" (change)=\"this.setNewTopicValue('replicas', $event.target.value)\" min=\"1\">\n    </mat-form-field>\n    <button mat-icon-button color=\"primary\" (click)=\"createTopic()\"><mat-icon>add</mat-icon></button>\n</mat-card>\n<mat-card style=\"margin: 10px\">    \n    <h3>Topics found</h3>\n    <mat-slide-toggle color=\"primary\">System queues</mat-slide-toggle>\n    <app-tabledata [columns]=\"columns\" [data]=\"rows\" (onRowClick)=\"onTopicClick($event)\" ></app-tabledata>\n</mat-card>"
 
 /***/ }),
 
@@ -231,6 +231,9 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatProgressSpinnerModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatFormFieldModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatInputModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatGridListModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatCardModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatSlideToggleModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot(_routes_routes__WEBPACK_IMPORTED_MODULE_6__["appRoutes"], { useHash: true }),
             ],
             providers: [
@@ -308,7 +311,7 @@ var LoaderComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "table {\r\n    width: 100%;\r\n}\r\n\r\n.wrapper {\r\n    margin-left: 10px;\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2Y7O0FBRUE7SUFDSSxpQkFBaUI7SUFDakIsV0FBVztBQUNmIiwiZmlsZSI6InNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxufVxyXG5cclxuLndyYXBwZXIge1xyXG4gICAgbWFyZ2luLWxlZnQ6IDEwcHg7XHJcbiAgICB3aWR0aDogMTAwJTtcclxufSJdfQ== */"
+module.exports = "table {\r\n    width: 100%;\r\n}\r\n\r\n.wrapper {\r\n    margin-left: 10px;\r\n    width: 95%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2Y7O0FBRUE7SUFDSSxpQkFBaUI7SUFDakIsVUFBVTtBQUNkIiwiZmlsZSI6InNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxufVxyXG5cclxuLndyYXBwZXIge1xyXG4gICAgbWFyZ2luLWxlZnQ6IDEwcHg7XHJcbiAgICB3aWR0aDogOTUlO1xyXG59Il19 */"
 
 /***/ }),
 
@@ -339,14 +342,12 @@ var TabledataComponent = /** @class */ (function () {
         this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"]();
         this.onRowClick = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         if (this.data != undefined) {
-            //this.datasource.data = this.data;
             this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.data);
             this.changeDetectorRef.detectChanges();
         }
     }
     TabledataComponent.prototype.ngOnInit = function () {
         if (this.data != undefined) {
-            //this.datasource.data = this.data;
             this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.data);
             this.changeDetectorRef.detectChanges();
         }
@@ -356,7 +357,6 @@ var TabledataComponent = /** @class */ (function () {
             this.displayedColumns = this.columns;
         }
         if (this.data != undefined) {
-            //this.datasource.data = this.data;
             this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.data);
             this.changeDetectorRef.detectChanges();
         }
@@ -465,8 +465,8 @@ var TopicInfoComponent = /** @class */ (function () {
         this.data.subscribe(function (topicInfo) {
             if (topicInfo != undefined && topicInfo.length > 0) {
                 _this.columns = Object.keys(topicInfo[0]);
+                _this.rows = topicInfo;
             }
-            _this.rows = topicInfo;
         });
     };
     TopicInfoComponent.prototype.updateOffset = function (offset) {
@@ -534,11 +534,17 @@ var TopicShortInfo = /** @class */ (function () {
 }());
 var TopicsComponent = /** @class */ (function () {
     function TopicsComponent(router, topicService) {
-        var _this = this;
         this.router = router;
         this.topicService = topicService;
         this.columns = [];
         this.rows = [];
+        this.newTopic = { topicName: "", partitions: 1, replicas: 1 };
+        this.refresh();
+    }
+    TopicsComponent.prototype.ngOnInit = function () {
+    };
+    TopicsComponent.prototype.refresh = function () {
+        var _this = this;
         this.data = this.topicService.getTopicList().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (topics) {
             return topics.map(function (topic) { return new TopicShortInfo(topic); });
         }));
@@ -548,11 +554,20 @@ var TopicsComponent = /** @class */ (function () {
             }
             _this.rows = topicInfo;
         });
-    }
-    TopicsComponent.prototype.ngOnInit = function () {
     };
     TopicsComponent.prototype.onTopicClick = function (topic) {
         this.router.navigate(["/topics/" + topic.topic]);
+    };
+    TopicsComponent.prototype.createTopic = function () {
+        var _this = this;
+        if (this.newTopic.topicName == undefined || this.newTopic.topicName === "") {
+            alert("Topic name must be set");
+            return;
+        }
+        this.topicService.createTopic(this.newTopic).subscribe(function (response) { return _this.refresh(); });
+    };
+    TopicsComponent.prototype.setNewTopicValue = function (key, value) {
+        this.newTopic[key] = value;
     };
     TopicsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -769,6 +784,9 @@ var TopicService = /** @class */ (function () {
         if (offset === void 0) { offset = 0; }
         return this.httpClient.get("/kafka/topics/" + topic + "?offset=" + offset + "&max=" + limit);
     };
+    TopicService.prototype.createTopic = function (newTopicRequest) {
+        return this.httpClient.post("/admin/topics", newTopicRequest);
+    };
     TopicService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
             providedIn: 'root'
@@ -846,7 +864,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\pablolm\Documents\Workspace\webapps\kafka-rest-proxy-ui\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\pablolm\Documents\Workspace\java\kafka-rest-proxy\kafka-rest-proxy-ui\src\main.ts */"./src/main.ts");
 
 
 /***/ })

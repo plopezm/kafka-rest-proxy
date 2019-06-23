@@ -9,6 +9,6 @@ cd kafka-rest-proxy-ui
 ng build
 
 echo "copying dist folder to static..."
-cp dist/* ../src/main/resources/static/
+cp dist/kafka-rest-proxy-ui/* ../src/main/resources/static/
 
 echo "Done :)"
