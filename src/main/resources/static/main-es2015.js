@@ -52,7 +52,7 @@ module.exports = "<div *ngIf=\"isLoading | async\" class=\"overlay\">\n  <mat-pr
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table mat-table [dataSource]=\"data\" class=\"mat-elevation-z8\">\n\n  <ng-container *ngFor=\"let column of displayedColumns\" [matColumnDef]=\"column\">\n    <th mat-header-cell *matHeaderCellDef> {{column}} </th>\n    <td mat-cell *matCellDef=\"let element\"> \n      {{this.getInfo(element[column])}} \n    </td>\n  </ng-container>\n\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\" (click)=\"onRowClick.emit(row)\"></tr>\n</table>"
+module.exports = "<mat-form-field class=\"wrapper\">\n  <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Filter\">\n</mat-form-field>\n<table id=\"table\" mat-table [dataSource]=\"datasource\" class=\"mat-elevation-z8\">\n\n  <ng-container *ngFor=\"let column of displayedColumns\" [matColumnDef]=\"column\">\n    <th mat-header-cell *matHeaderCellDef> {{column}} </th>\n    <td mat-cell *matCellDef=\"let element\"> \n      {{this.getInfo(element[column])}} \n    </td>\n  </ng-container>\n\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\" (click)=\"onRowClick.emit(row)\"></tr>\n</table>"
 
 /***/ }),
 
@@ -63,7 +63,7 @@ module.exports = "<table mat-table [dataSource]=\"data\" class=\"mat-elevation-z
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"formWrapper\">\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Offset\" value=\"{{this.offset}}\" (change)=\"this.updateOffset($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Max records\" value=\"{{this.maxRecords}}\" (change)=\"this.updateMax($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <button mat-icon-button color=\"primary\" (click)=\"refresh()\"><mat-icon>refresh</mat-icon></button>\r\n</div>\r\n<app-tabledata [columns]=\"columns\" [data]=\"data\" ></app-tabledata>\r\n"
+module.exports = "<div class=\"formWrapper\">\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Offset\" value=\"{{this.offset}}\" (change)=\"this.updateOffset($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <mat-form-field class=\"form-field-wrapper\">\r\n        <input matInput type=\"number\" placeholder=\"Max records\" value=\"{{this.maxRecords}}\" (change)=\"this.updateMax($event.target.value)\" min=\"0\">\r\n    </mat-form-field>\r\n    <button mat-icon-button color=\"primary\" (click)=\"refresh()\"><mat-icon>refresh</mat-icon></button>\r\n</div>\r\n<app-tabledata [columns]=\"columns\" [data]=\"rows\" ></app-tabledata>\r\n"
 
 /***/ }),
 
@@ -74,7 +74,7 @@ module.exports = "<div class=\"formWrapper\">\r\n    <mat-form-field class=\"for
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2> Topics </h2>\n<app-tabledata [columns]=\"columns\" [data]=\"data\" (onRowClick)=\"onTopicClick($event)\" ></app-tabledata>\n"
+module.exports = "<h2> Topics </h2>\n<app-tabledata [columns]=\"columns\" [data]=\"rows\" (onRowClick)=\"onTopicClick($event)\" ></app-tabledata>\n"
 
 /***/ }),
 
@@ -301,7 +301,7 @@ LoaderComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9jb21wb25lbnRzL3RhYmxlZGF0YS90YWJsZWRhdGEuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG59Il19 */"
+module.exports = "table {\r\n    width: 100%;\r\n}\r\n\r\n.wrapper {\r\n    margin-left: 10px;\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2Y7O0FBRUE7SUFDSSxpQkFBaUI7SUFDakIsV0FBVztBQUNmIiwiZmlsZSI6InNyYy9hcHAvY29tcG9uZW50cy90YWJsZWRhdGEvdGFibGVkYXRhLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XHJcbiAgICB3aWR0aDogMTAwJTtcclxufVxyXG5cclxuLndyYXBwZXIge1xyXG4gICAgbWFyZ2luLWxlZnQ6IDEwcHg7XHJcbiAgICB3aWR0aDogMTAwJTtcclxufSJdfQ== */"
 
 /***/ }),
 
@@ -318,21 +318,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm2015/material.js");
+
 
 
 
 let TabledataComponent = class TabledataComponent {
-    constructor(json) {
+    constructor(json, changeDetectorRef) {
         this.json = json;
+        this.changeDetectorRef = changeDetectorRef;
         this.displayedColumns = [];
         this.columns = [];
+        this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"]();
         this.onRowClick = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        if (this.data != undefined) {
+            //this.datasource.data = this.data;
+            this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.data);
+            this.changeDetectorRef.detectChanges();
+        }
     }
     ngOnInit() {
+        if (this.data != undefined) {
+            //this.datasource.data = this.data;
+            this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.data);
+            this.changeDetectorRef.detectChanges();
+        }
     }
     ngOnChanges(changes) {
         if (this.columns != undefined) {
             this.displayedColumns = this.columns;
+        }
+        if (this.data != undefined) {
+            //this.datasource.data = this.data;
+            this.datasource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.data);
+            this.changeDetectorRef.detectChanges();
         }
     }
     getInfo(data) {
@@ -340,6 +359,9 @@ let TabledataComponent = class TabledataComponent {
             return this.json.transform(data);
         }
         return data;
+    }
+    applyFilter(filterValue) {
+        this.datasource.filter = filterValue.trim().toLowerCase();
     }
 };
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -360,7 +382,7 @@ TabledataComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./tabledata.component.html */ "./node_modules/raw-loader/index.js!./src/app/components/tabledata/tabledata.component.html"),
         styles: [__webpack_require__(/*! ./tabledata.component.css */ "./src/app/components/tabledata/tabledata.component.css")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common__WEBPACK_IMPORTED_MODULE_2__["JsonPipe"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common__WEBPACK_IMPORTED_MODULE_2__["JsonPipe"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"]])
 ], TabledataComponent);
 
 
@@ -405,6 +427,7 @@ let TopicInfoComponent = class TopicInfoComponent {
         this.offset = 0;
         this.maxRecords = 100;
         this.columns = [];
+        this.rows = [];
         this.router.paramMap.subscribe(params => {
             this.topicId = params.get("id");
             this.refresh();
@@ -433,6 +456,7 @@ let TopicInfoComponent = class TopicInfoComponent {
             if (topicInfo != undefined && topicInfo.length > 0) {
                 this.columns = Object.keys(topicInfo[0]);
             }
+            this.rows = topicInfo;
         });
     }
     updateOffset(offset) {
@@ -501,6 +525,7 @@ let TopicsComponent = class TopicsComponent {
         this.router = router;
         this.topicService = topicService;
         this.columns = [];
+        this.rows = [];
         this.data = this.topicService.getTopicList().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(topics => {
             return topics.map(topic => new TopicShortInfo(topic));
         }));
@@ -508,6 +533,7 @@ let TopicsComponent = class TopicsComponent {
             if (topicInfo != undefined && topicInfo.length > 0) {
                 this.columns = Object.keys(topicInfo[0]);
             }
+            this.rows = topicInfo;
         });
     }
     ngOnInit() {
