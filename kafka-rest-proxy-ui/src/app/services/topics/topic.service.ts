@@ -51,8 +51,8 @@ export class TopicService {
     return 'http://localhost:9000/';  
   }  
 
-  getTopicList(): Observable<TopicInfo[]> {
-    return this.httpClient.get("/kafka/topics")
+  getTopicList(showSystemTopics: boolean): Observable<TopicInfo[]> {
+    return this.httpClient.get(`/kafka/topics?sst=${showSystemTopics}`)
       .pipe(
         map(response => {
             return Object.keys(response)

@@ -74,7 +74,7 @@ module.exports = "<div style=\"margin:10px\">\r\n    <h2> Topic messages </h2>\r
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"margin:10px\">\n    <h2> Topics </h2>\n    \n</div>\n\n<mat-card style=\"margin: 10px\">\n    <h3>Create topic</h3>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"text\" placeholder=\"Queue name\" value=\"{{this.newTopic.topicName}}\" (change)=\"this.setNewTopicValue('topicName', $event.target.value)\">\n    </mat-form-field>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"number\" placeholder=\"Partitions\" value=\"{{this.newTopic.partitions}}\" (change)=\"this.setNewTopicValue('partitions', $event.target.value)\" min=\"1\">\n    </mat-form-field>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"number\" placeholder=\"Replicas\" value=\"{{this.newTopic.replicas}}\" (change)=\"this.setNewTopicValue('replicas', $event.target.value)\" min=\"1\">\n    </mat-form-field>\n    <button mat-icon-button color=\"primary\" (click)=\"createTopic()\"><mat-icon>add</mat-icon></button>\n</mat-card>\n<mat-card style=\"margin: 10px\">    \n    <h3>Topics found</h3>\n    <mat-slide-toggle color=\"primary\">System queues</mat-slide-toggle>\n    <app-tabledata [columns]=\"columns\" [data]=\"rows\" (onRowClick)=\"onTopicClick($event)\" ></app-tabledata>\n</mat-card>"
+module.exports = "<div style=\"margin:10px\">\n    <h2> Topics </h2>\n</div>\n\n<mat-card style=\"margin: 10px\">\n    <h3>Create topic</h3>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"text\" placeholder=\"Queue name\" value=\"{{this.newTopic.topicName}}\" (change)=\"this.setNewTopicValue('topicName', $event.target.value)\">\n    </mat-form-field>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"number\" placeholder=\"Partitions\" value=\"{{this.newTopic.partitions}}\" (change)=\"this.setNewTopicValue('partitions', $event.target.value)\" min=\"1\">\n    </mat-form-field>\n    <mat-form-field class=\"form-field-wrapper\">\n        <input matInput type=\"number\" placeholder=\"Replicas\" value=\"{{this.newTopic.replicas}}\" (change)=\"this.setNewTopicValue('replicas', $event.target.value)\" min=\"1\">\n    </mat-form-field>\n    <button mat-icon-button color=\"primary\" (click)=\"createTopic()\"><mat-icon>add</mat-icon></button>\n</mat-card>\n<mat-card style=\"margin: 10px\">    \n    <h3>Topics found</h3>\n    <mat-slide-toggle color=\"primary\" [checked]=\"showSystemTopics\" (change)=\"toggleShowSystemTopics()\">Show system topics</mat-slide-toggle>\n    <app-tabledata [columns]=\"columns\" [data]=\"rows\" (onRowClick)=\"onTopicClick($event)\" ></app-tabledata>\n</mat-card>"
 
 /***/ }),
 
@@ -113,8 +113,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _services_topics_topic_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/topics/topic.service */ "./src/app/services/topics/topic.service.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-
 
 
 
@@ -131,18 +129,8 @@ var TopicShortInfo = /** @class */ (function () {
 }());
 var AppComponent = /** @class */ (function () {
     function AppComponent(topicService) {
-        var _this = this;
         this.topicService = topicService;
         this.title = 'kafka-rest-proxy-ui';
-        this.columns = [];
-        this.data = this.topicService.getTopicList().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (topics) {
-            return topics.map(function (topic) { return new TopicShortInfo(topic); });
-        }));
-        this.data.subscribe(function (topicInfo) {
-            if (topicInfo != undefined && topicInfo.length > 0) {
-                _this.columns = Object.keys(topicInfo[0]);
-            }
-        });
     }
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -539,13 +527,14 @@ var TopicsComponent = /** @class */ (function () {
         this.columns = [];
         this.rows = [];
         this.newTopic = { topicName: "", partitions: 1, replicas: 1 };
+        this.showSystemTopics = false;
         this.refresh();
     }
     TopicsComponent.prototype.ngOnInit = function () {
     };
     TopicsComponent.prototype.refresh = function () {
         var _this = this;
-        this.data = this.topicService.getTopicList().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (topics) {
+        this.data = this.topicService.getTopicList(this.showSystemTopics).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (topics) {
             return topics.map(function (topic) { return new TopicShortInfo(topic); });
         }));
         this.data.subscribe(function (topicInfo) {
@@ -568,6 +557,10 @@ var TopicsComponent = /** @class */ (function () {
     };
     TopicsComponent.prototype.setNewTopicValue = function (key, value) {
         this.newTopic[key] = value;
+    };
+    TopicsComponent.prototype.toggleShowSystemTopics = function () {
+        this.showSystemTopics = !this.showSystemTopics;
+        this.refresh();
     };
     TopicsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -770,8 +763,8 @@ var TopicService = /** @class */ (function () {
     TopicService.prototype.getBaseUrl = function () {
         return 'http://localhost:9000/';
     };
-    TopicService.prototype.getTopicList = function () {
-        return this.httpClient.get("/kafka/topics")
+    TopicService.prototype.getTopicList = function (showSystemTopics) {
+        return this.httpClient.get("/kafka/topics?sst=" + showSystemTopics)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) {
             return Object.keys(response)
                 .map(function (key) { return response[key]; })

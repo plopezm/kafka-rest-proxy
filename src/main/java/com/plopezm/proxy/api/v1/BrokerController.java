@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -41,10 +42,20 @@ public class BrokerController {
 	}
 	
 	@GetMapping(path = "/topics", produces = "application/json")
-	public Map<String, List<PartitionInfo>> getTopics() {
+	public Map<String, List<PartitionInfo>> getTopics(
+		@RequestParam(value = "sst", required = false) Boolean showSystemTopics
+	) {
 		try(final Consumer<String, Object> consumer = this.consumerFactory.createConsumer()) {
-			return consumer.listTopics();
+			Map<String, List<PartitionInfo>> topics = consumer.listTopics();
+
+			if (showSystemTopics != null && !showSystemTopics) {
+				topics = topics.entrySet().stream().filter(topic -> !topic.getKey().startsWith("_"))
+				.collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+			}
+
+			return topics;
 		}
+
 	}
 	
 	@GetMapping(path = "/topics/{topicId}")

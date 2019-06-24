@@ -33,6 +33,7 @@ export class TopicsComponent implements OnInit {
   columns: string[] = [];
   rows: any[] = [];
   newTopic: NewTopicRequest = {topicName: "", partitions: 1, replicas: 1};
+  showSystemTopics: boolean = false;
 
   constructor(private router: Router, private topicService: TopicService) {
     this.refresh();
@@ -42,7 +43,7 @@ export class TopicsComponent implements OnInit {
   }
 
   refresh() {
-    this.data = this.topicService.getTopicList().pipe(      
+    this.data = this.topicService.getTopicList(this.showSystemTopics).pipe(      
       map(topics => {
         return topics.map(topic => new TopicShortInfo(topic));
       })
@@ -69,6 +70,10 @@ export class TopicsComponent implements OnInit {
 
   setNewTopicValue(key: string, value: any) {
     this.newTopic[key] = value;
-  }
+  }  
 
+  toggleShowSystemTopics() {
+    this.showSystemTopics = !this.showSystemTopics;
+    this.refresh();
+  }
 }

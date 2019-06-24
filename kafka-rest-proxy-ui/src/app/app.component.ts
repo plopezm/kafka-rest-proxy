@@ -28,22 +28,6 @@ class TopicShortInfo {
 })
 export class AppComponent {
   title = 'kafka-rest-proxy-ui';
-
-  data: Observable<TopicShortInfo[]>;
-  columns: string[] = [];
-
   constructor(private topicService: TopicService) {
-    this.data = this.topicService.getTopicList().pipe(      
-      map(topics => {
-        return topics.map(topic => new TopicShortInfo(topic));
-      })
-    );
-    this.data.subscribe(topicInfo => {
-      if (topicInfo != undefined && topicInfo.length > 0) {
-        this.columns = Object.keys(topicInfo[0]);
-      }
-    });
   }
-
-
 }
